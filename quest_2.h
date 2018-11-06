@@ -17,6 +17,8 @@ public:
     void add_bb(QString &id);
     int perk;
     QString id;
+    int time_per;
+    int krit[3];
     ~quest_2();
 
 private:
@@ -25,6 +27,12 @@ public slots:
     void add_button();
     void delete_button();
     void add_text_1(QString id);
+    void show_red();
+private slots:
+    void on_change_clicked();
+    void on_pushButton_clicked();
+    void on_pushButton_4_clicked();
+    void on_pushButton_5_clicked();
 };
 
 #endif // QUEST_2_H

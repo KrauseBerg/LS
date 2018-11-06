@@ -23,7 +23,7 @@
    <bool>false</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/bg_image/images/Фон.PNG);
+   <string notr="true">background-image: url(:/bg_image/images/Фон_1.PNG);
 color: rgb(255, 255, 255);</string>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -77,6 +77,46 @@ background-image: url(:/bg_image/images/Фон_1.PNG);</string>
       </item>
      </layout>
     </widget>
+   </widget>
+   <widget class="QLabel" name="name1">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>0</y>
+      <width>721</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 30pt &quot;Times New Roman&quot;;
+color: rgb(255, 255, 127);</string>
+    </property>
+    <property name="text">
+     <string>Безопасность жизнедеятельности</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="name2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>90</y>
+      <width>731</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font:45pt &quot;Times New Roman&quot;;
+color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string> Тест</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

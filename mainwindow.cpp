@@ -3,6 +3,7 @@
 #include "w_setting.h"
 #include "otvet.h"
 #include <fstream>
+#include <QFile>
 #include <ctime>
 #include <QDebug>
 #include <QGridLayout>
@@ -13,8 +14,20 @@ otvet *otv;
 
 QWidget *thems;
 
+
+string number_to_string_mw(int x){
+    if(!x) return "0";
+    string s,s2;
+    while(x){
+        s.push_back(x%10 + '0');
+        x/=10;
+    }
+    reverse(s.begin(),s.end());
+    return s;
+}
+
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
+    QMainWindow(parent), kol(0),
     ui(new Ui::MainWindow){
     ui->setupUi(this);
     set=new w_setting();
@@ -42,12 +55,8 @@ MainWindow::MainWindow(QWidget *parent) :
                 thems->setStyleSheet("background-image: url(:/bg_image/images/White);color: rgb(0, 0, 0);");
                 thems->setSizePolicy(sizePolicy().Minimum,sizePolicy().Minimum);
                 ui->scrollArea->setWidgetResizable(true);
-                //qlay->addWidget(thems);
                 ui->gridLayout->addWidget(thems,i,j);
-                // QWidget* widget = new QWidget;
-                // widget -> setLayout(qlay);
-                //ui->scrollArea->setWidget(widget);
-                //ui->scrollArea->setLayout(qlay);
+                connect(thems,SIGNAL(clicked()),this,SLOT(showOtvet()));
                 str="";
                 if(j==0)
                     j++;
@@ -60,10 +69,22 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     MainWindow::setFixedSize(744,588);
     connect(ui->setting,SIGNAL(triggered(bool)),this,SLOT(showSetting()));
-    //    connect(ui->var_1,SIGNAL(clicked(bool)),this,SLOT(showOtvet()));
-    //    connect(ui->var_2,SIGNAL(clicked(bool)),this,SLOT(showOtvet()));
-    //    connect(ui->var_3,SIGNAL(clicked(bool)),this,SLOT(showOtvet()));
-    //    connect(ui->var_4,SIGNAL(clicked(bool)),this,SLOT(showOtvet()));
+    QFile col("color.txt");
+    col.open(QIODevice::ReadOnly);
+    if(col.exists()){
+        name_1=col.readLine(512);
+        name_1.chop(2);
+        ui->name1->setText(name_1);
+        name_2=col.readLine(512);
+        name_2.chop(2);
+        ui->name2->setText(name_2);
+        str_col_1=col.readLine(512);
+        str_col_1.chop(2);
+        ui->name1->setStyleSheet(str_col_1);
+        str_col_2=col.readLine(512);
+        ui->name2->setStyleSheet(str_col_2);
+    }
+    col.close();
 }
 
 MainWindow::~MainWindow(){
@@ -76,35 +97,39 @@ void MainWindow::showSetting(){
 }
 
 void MainWindow::showOtvet(){
-    //otvet ot;
-    if(sender()->objectName()=="var_1")
-        fil_f(1);
-    if(sender()->objectName()=="var_2")
-        fil_f(2);
-    if(sender()->objectName()=="var_3")
-        fil_f(3);
-    if(sender()->objectName()=="var_4")
-        fil_f(4);
-
+    fil_f();
+    otv->take_path(sender()->objectName(),kol);
     otv->show();
-
 }
-void MainWindow::fil_f(int j){
+
+void MainWindow::fil_f(){
+    kol=0;
+    QString path=sender()->objectName();
+    if(path[0]==' ')
+        path.remove(0,1);
+
     otv->rand_f.clear();
-    for(int i=(j-1)*25;i<25*j;i++){
-        otv->rand_f.push_back(i+1);
+    for(int i=1;i<140;i++){
+
+        string ph="./"+path.toStdString()+'/'+number_to_string_mw(i)+".txt";
+        QFile f(ph.c_str());
+        if(f.exists()){
+            kol++;
+        }
+    }
+    for(int i=1;i<=kol;i++){
+        otv->rand_f.push_back(i);
     }
 
     srand(time(0));
     random_shuffle(otv->rand_f.begin(),otv->rand_f.end());
-    for(int i=0;i<7;i++){
+    //    for(int i=0;i<7;i++){
 
-        QString a=QString::number(otv->rand_f[i]);
-    }
+    //        QString a=QString::number(otv->rand_f[i]);
+    //    }
 
 }
-void MainWindow::zap(){
-
+void MainWindow::zap(QString name1, QString name2, QString str_col1, QString str_col2){
     int ch=0;
     fstream kat("katalog.txt");
     if(kat.peek()!=EOF){
@@ -121,7 +146,12 @@ void MainWindow::zap(){
                 thems->setSizePolicy(sizePolicy().Minimum,sizePolicy().Minimum);
                 ui->scrollArea->setWidgetResizable(true);
                 str="";
+                connect(thems,SIGNAL(clicked()),this,SLOT(showOtvet()));
             }
         }
     }
+    ui->name1->setText(name1);
+    ui->name1->setStyleSheet(str_col1);
+    ui->name2->setText(name2);
+    ui->name2->setStyleSheet(str_col2);
 }

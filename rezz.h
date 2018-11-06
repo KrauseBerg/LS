@@ -15,8 +15,11 @@ public:
     explicit rezz(QWidget *parent = 0);
     ~rezz();
     int mas;
+    int five;
+    int four;
+    int three;
 public slots:
-    void show_col();
+    void show_col(int posl, QString path);
 
 private:
     Ui::rezz *ui;
